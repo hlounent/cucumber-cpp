@@ -69,7 +69,7 @@ private:
         return stepManager.stepMatches(stepMatch).getResultSet();
     }
     void TearDown() {
-        stepManager.clearSteps();
+        stepManager.deleteAllSteps();
     }
 };
 

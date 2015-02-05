@@ -122,6 +122,7 @@ const std::string &InvokeResult::getDescription() const {
     return description;
 }
 
+StepManager::steps_type* StepManager::steps_ = NULL;
 
 StepManager::~StepManager() {
 }
@@ -146,13 +147,26 @@ StepInfo *StepManager::getStep(step_id_type id) {
     return steps()[id];
 }
 
+void StepManager::deleteAllSteps()
+{
+    const steps_type::const_iterator end(steps().end());
+    for (steps_type::const_iterator it = steps().begin(); it != end; ++it) {
+        StepInfo* step = it->second;
+        delete step;
+    }
+    delete steps_;
+    steps_ = NULL;
+}
+
 /**
  * Needed to fix the "static initialization order fiasco"
  * http://www.parashift.com/c++-faq-lite/ctors.html#faq-10.12
  */
 StepManager::steps_type& StepManager::steps() const {
-    static steps_type *steps = new steps_type();
-    return *steps;
+    if (steps_ == NULL) {
+        steps_ = new steps_type();
+    }
+    return *steps_;
 }
 
 

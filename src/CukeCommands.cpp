@@ -15,6 +15,7 @@ CukeCommands::~CukeCommands() {
     if (hasStarted) {
         hookRegistrar.execAfterAllHooks();
     }
+    stepManager.deleteAllSteps();
 }
 
 void CukeCommands::beginScenario(const TagExpression::tag_list *tags) {

@@ -153,8 +153,16 @@ public:
     void addStep(StepInfo *stepInfo);
     MatchResult stepMatches(const std::string &stepDescription) const;
     StepInfo *getStep(step_id_type id);
+
+    /** Delete all steps */
+    void deleteAllSteps();
+
 protected:
     steps_type& steps() const;
+
+private:
+    /** The collection of steps */
+    static steps_type* steps_;
 };
 
 

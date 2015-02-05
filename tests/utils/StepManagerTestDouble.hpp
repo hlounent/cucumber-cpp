@@ -52,10 +52,6 @@ public:
 
 class StepManagerTestDouble : public StepManager {
 public:
-    void clearSteps() {
-        steps().clear();
-    }
-
     steps_type::size_type count() {
         return steps().size();
     }

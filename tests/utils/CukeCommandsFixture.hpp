@@ -21,7 +21,7 @@ public:
 
 protected:
     CukeCommands cukeCommands;
-    shared_ptr<StepInfo> stepInfoPtr;
+    StepInfo* stepInfoPtr;
 
     template<class T>
     void runStepBodyTest() {
@@ -33,12 +33,12 @@ protected:
 
     template<class T>
     void addStepToManager(const std::string &matcher) {
-        stepInfoPtr = shared_ptr<StepInfo>(new StepInvoker<T>(matcher, ""));
-        stepManager.addStep(stepInfoPtr.get());
+        stepInfoPtr = new StepInvoker<T>(matcher, "");
+        stepManager.addStep(stepInfoPtr);
     }
 
     virtual void TearDown() {
-        stepManager.clearSteps();
+        stepManager.deleteAllSteps();
     }
 };
 

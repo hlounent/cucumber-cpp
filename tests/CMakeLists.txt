@@ -36,7 +36,7 @@ if(CUKE_TEST_LIBRARIES)
     cuke_add_test(unit/TableTest)
     cuke_add_test(unit/TagTest)
 
-    cuke_add_driver_test(integration/drivers/GTestDriverTest ${GTEST_LIBRARIES})
+    cuke_add_driver_test(integration/drivers/GTestDriverTest ${GTEST_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
 endif()
 
 if(CPPSPEC_FOUND)

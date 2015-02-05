@@ -24,6 +24,7 @@
 #define CUKE_OBJECT_(class_name, parent_class, registration_fn)           \
 class class_name : public parent_class {                                  \
 public:                                                                   \
+	virtual ~class_name() {}                                              \
     void body();                                                          \
 private:                                                                  \
     static const int cukeRegId;                                           \

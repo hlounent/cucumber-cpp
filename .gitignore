@@ -1,5 +1,12 @@
+# Backup files
+*~
+
 # Qt Creator
 CMakeLists.txt.user
+
+# Eclipse
+.project
+.cproject
 
 # Bundler
 Gemfile.lock

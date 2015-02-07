@@ -3,12 +3,14 @@
 
 #include "WireProtocol.hpp"
 
+#include <boost/scoped_ptr.hpp>
+
 namespace cucumber {
 namespace internal {
 
 class ScenarioCommand : public WireCommand {
 protected:
-    std::auto_ptr<const CukeEngine::tags_type> tags;
+    boost::scoped_ptr<const CukeEngine::tags_type> tags;
 
     ScenarioCommand(const CukeEngine::tags_type *tags);
 };

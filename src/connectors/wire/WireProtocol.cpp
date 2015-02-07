@@ -9,6 +9,7 @@
 #include <boost/foreach.hpp>
 
 #include <iostream>
+#include <list>
 #include <string>
 #include <sstream>
 
@@ -323,17 +324,49 @@ const std::string JsonSpiritWireMessageCodec::encode(const WireResponse *respons
     }
 }
 
+namespace {
+typedef std::list<const WireCommand*> WireCommandList;
+WireCommandList commands;
+
+typedef std::list<const WireResponse*> WireResponseList;
+WireResponseList responses;
+}
+
 WireProtocolHandler::WireProtocolHandler(const WireMessageCodec *codec, CukeEngine *engine) :
     codec(codec),
     engine(engine) {
+}
+
+WireProtocolHandler::~WireProtocolHandler()
+{
+    {
+        const WireCommandList::const_iterator end = commands.end();
+        for (WireCommandList::const_iterator it = commands.begin(); it != end;)
+        {
+            WireCommandList::const_iterator current = it;
+            ++it;
+            delete *current;
+        }
+    }
+    {
+        const WireResponseList::const_iterator end = responses.end();
+        for (WireResponseList::const_iterator it = responses.begin(); it != end;)
+        {
+            WireResponseList::const_iterator current = it;
+            ++it;
+            delete *current;
+        }
+    }
 }
 
 std::string WireProtocolHandler::handle(const std::string &request) const {
     std::string response;
     // LOG request
     try {
-        const WireCommand *command = codec->decode(request);
-        const WireResponse *wireResponse = command->run(engine);
+        const WireCommand* command(codec->decode(request));
+        commands.push_back(command);
+        const WireResponse* wireResponse(command->run(engine));
+        responses.push_back(wireResponse);
         response = codec->encode(wireResponse);
     } catch (...) {
         response = "[\"fail\"]";

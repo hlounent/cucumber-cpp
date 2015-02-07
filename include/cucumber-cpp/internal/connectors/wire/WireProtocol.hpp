@@ -169,6 +169,8 @@ private:
 public:
     WireProtocolHandler(const WireMessageCodec *codec, CukeEngine *engine);
 
+    virtual ~WireProtocolHandler();
+
     std::string handle(const std::string &request) const;
 };
 

@@ -3,6 +3,8 @@
 
 #include "hook/Tag.hpp"
 
+#include <boost/scoped_ptr.hpp>
+
 namespace cucumber {
 namespace internal {
 
@@ -12,7 +14,8 @@ public:
 
     const TagExpression::tag_list & getTags();
 private:
-    shared_ptr<const TagExpression::tag_list> pTags;
+    const TagExpression::tag_list* pTags;
+    boost::scoped_ptr<const TagExpression::tag_list> pOwnedTags;
 };
 
 }

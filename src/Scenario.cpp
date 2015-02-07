@@ -4,14 +4,15 @@ namespace cucumber {
 namespace internal {
 
 Scenario::Scenario(const TagExpression::tag_list *pTags) :
-    pTags(pTags) {
+    pTags(pTags),
+    pOwnedTags() {
     if (!pTags) {
-        this->pTags = shared_ptr<const TagExpression::tag_list>(new TagExpression::tag_list);
+        pOwnedTags.reset(new TagExpression::tag_list);
     }
 };
 
 const TagExpression::tag_list & Scenario::getTags() {
-    return *(pTags.get());
+    return pTags != NULL ? *pTags : *(pOwnedTags.get());
 }
 
 }

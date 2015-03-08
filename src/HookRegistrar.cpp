@@ -1,9 +1,16 @@
 #include <cucumber-cpp/internal/hook/HookRegistrar.hpp>
 
 #include <cucumber-cpp/internal/CukeCommands.hpp>
+#include <cucumber-cpp/internal/utils/ScopedList.hpp>
+
+#include <boost/scoped_ptr.hpp>
 
 namespace cucumber {
 namespace internal {
+
+Hook::~Hook()
+{
+}
 
 void Hook::invokeHook(Scenario *scenario) {
     if (tagsMatch(scenario)) {
@@ -40,12 +47,15 @@ void UnconditionalHook::invokeHook(Scenario*) {
 HookRegistrar::~HookRegistrar() {
 }
 
-void HookRegistrar::addBeforeHook(BeforeHook *beforeHook) {
-    beforeHooks().push_back(beforeHook);
+void HookRegistrar::addBeforeHook(BeforeHook *hook) {
+    beforeHooks().push_back(hook);
+    typedef ScopedList<Hook> Deleter;
+    static boost::scoped_ptr<Deleter> deleter(new Deleter());
+    deleter->add(hook);
 }
 
 HookRegistrar::hook_list_type& HookRegistrar::beforeHooks() {
-    static hook_list_type *beforeHooks = new hook_list_type();
+    static boost::scoped_ptr<hook_list_type> beforeHooks(new hook_list_type());
     return *beforeHooks;
 }
 
@@ -54,12 +64,15 @@ void HookRegistrar::execBeforeHooks(Scenario *scenario) {
 }
 
 
-void HookRegistrar::addAroundStepHook(AroundStepHook *aroundStepHook) {
-    aroundStepHooks().push_front(aroundStepHook);
+void HookRegistrar::addAroundStepHook(AroundStepHook *hook) {
+    aroundStepHooks().push_front(hook);
+    typedef ScopedList<Hook> Deleter;
+    static boost::scoped_ptr<Deleter> deleter(new Deleter());
+    deleter->add(hook);
 }
 
 HookRegistrar::aroundhook_list_type& HookRegistrar::aroundStepHooks() {
-    static aroundhook_list_type *aroundStepHooks = new aroundhook_list_type();
+    static boost::scoped_ptr<aroundhook_list_type> aroundStepHooks(new aroundhook_list_type());
     return *aroundStepHooks;
 }
 
@@ -69,12 +82,15 @@ InvokeResult HookRegistrar::execStepChain(Scenario *scenario, StepInfo *stepInfo
 }
 
 
-void HookRegistrar::addAfterStepHook(AfterStepHook *afterStepHook) {
-    afterStepHooks().push_front(afterStepHook);
+void HookRegistrar::addAfterStepHook(AfterStepHook *hook) {
+    afterStepHooks().push_front(hook);
+    typedef ScopedList<Hook> Deleter;
+    static boost::scoped_ptr<Deleter> deleter(new Deleter());
+    deleter->add(hook);
 }
 
 HookRegistrar::hook_list_type& HookRegistrar::afterStepHooks() {
-    static hook_list_type *afterStepHooks = new hook_list_type();
+    static boost::scoped_ptr<hook_list_type> afterStepHooks(new hook_list_type());
     return *afterStepHooks;
 }
 
@@ -83,12 +99,15 @@ void HookRegistrar::execAfterStepHooks(Scenario *scenario) {
 }
 
 
-void HookRegistrar::addAfterHook(AfterHook *afterHook) {
-    afterHooks().push_front(afterHook);
+void HookRegistrar::addAfterHook(AfterHook *hook) {
+    afterHooks().push_front(hook);
+    typedef ScopedList<Hook> Deleter;
+    static boost::scoped_ptr<Deleter> deleter(new Deleter());
+    deleter->add(hook);
 }
 
 HookRegistrar::hook_list_type& HookRegistrar::afterHooks() {
-    static hook_list_type *afterHooks = new hook_list_type();
+    static boost::scoped_ptr<hook_list_type> afterHooks(new hook_list_type());
     return *afterHooks;
 }
 
@@ -104,12 +123,15 @@ void HookRegistrar::execHooks(HookRegistrar::hook_list_type &hookList, Scenario 
 }
 
 HookRegistrar::hook_list_type& HookRegistrar::beforeAllHooks() {
-    static hook_list_type *beforeAllHooks = new hook_list_type();
+    static boost::scoped_ptr<hook_list_type> beforeAllHooks(new hook_list_type());
     return *beforeAllHooks;
 }
 
-void HookRegistrar::addBeforeAllHook(BeforeAllHook *beforeAllHook) {
-    beforeAllHooks().push_back(beforeAllHook);
+void HookRegistrar::addBeforeAllHook(BeforeAllHook *hook) {
+    beforeAllHooks().push_back(hook);
+    typedef ScopedList<Hook> Deleter;
+    static boost::scoped_ptr<Deleter> deleter(new Deleter());
+    deleter->add(hook);
 }
 
 void HookRegistrar::execBeforeAllHooks() {
@@ -117,12 +139,15 @@ void HookRegistrar::execBeforeAllHooks() {
 }
 
 HookRegistrar::hook_list_type& HookRegistrar::afterAllHooks() {
-    static hook_list_type *afterAllHooks = new hook_list_type();
+    static boost::scoped_ptr<hook_list_type> afterAllHooks(new hook_list_type());
     return *afterAllHooks;
 }
 
-void HookRegistrar::addAfterAllHook(AfterAllHook *afterAllHook) {
-    afterAllHooks().push_back(afterAllHook);
+void HookRegistrar::addAfterAllHook(AfterAllHook *hook) {
+    afterAllHooks().push_back(hook);
+    typedef ScopedList<Hook> Deleter;
+    static boost::scoped_ptr<Deleter> deleter(new Deleter());
+    deleter->add(hook);
 }
 
 void HookRegistrar::execAfterAllHooks() {
